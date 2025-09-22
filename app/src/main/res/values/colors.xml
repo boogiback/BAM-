@@ -1,10 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- ערכים בסיסיים; אם כבר קיים אצלך colors.xml מותר לדרוס או למזג -->
-    <color name="purple_200">#BB86FC</color>
-    <color name="purple_500">#6200EE</color>
-    <color name="purple_700">#3700B3</color>
-    <color name="teal_200">#03DAC5</color>
-    <color name="teal_700">#018786</color>
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
+    <!-- Palette -->
+    <color name="bg_black">#121212</color>
+    <color name="card_white">#FFFFFF</color>
+    <color name="text_primary">#111111</color> <!-- כמעט שחור -->
+    <color name="text_secondary">#444444</color> <!-- אפור כהה -->
+    <color name="brand_purple">#7A2BF5</color>
+    <color name="btn_purple">#7A2BF5</color>
+    <color name="btn_purple_pressed">#5F15D8</color>
+    <color name="chip_gray">#EEEEEE</color>
+    <color name="lead_uploaded_bg">#E6F7EA</color>
+    <color name="divider">#1FFFFFFF</color>
+
+    <!-- Aliases for older layouts -->
+    <color name="card_bg">@color/card_white</color>
+    <color name="link_color">#1A73E8</color>
 </resources>

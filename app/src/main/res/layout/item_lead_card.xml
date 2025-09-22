@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/card_bg"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_marginBottom="10dp"
+    android:elevation="2dp">
+
+    <!-- VIEW MODE -->
+    <LinearLayout
+        android:id="@+id/contentViewMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:textColor="@color/text_primary"/>
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="6dp"/>
+
+        <TextView
+            android:id="@+id/tvSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/link_color"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:text="-" />
+
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/link_color"
+            android:layout_marginTop="2dp"
+            android:text="-" />
+
+        <TextView
+            android:id="@+id/tvType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="6dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnUpload"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/upload"/>
+
+            <Button
+                android:id="@+id/btnDelete"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/delete"/>
+
+            <Button
+                android:id="@+id/btnEdit"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/edit"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- EDIT MODE -->
+    <LinearLayout
+        android:id="@+id/contentEditMode"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/etFirstName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/first_name"/>
+            <EditText
+                android:id="@+id/etLastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:hint="@string/last_name"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/etType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:hint="@string/type"/>
+
+        <EditText
+            android:id="@+id/etNotes"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:gravity="top|start"
+            android:layout_marginTop="6dp"
+            android:hint="@string/notes"
+            android:inputType="textMultiLine"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnSave"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/save"/>
+
+            <Button
+                android:id="@+id/btnCancel"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/cancel"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

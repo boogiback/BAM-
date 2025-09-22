@@ -1,35 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App -->
     <string name="app_name">BAM!</string>
+    <string name="leads_title">LEADS:</string>
 
-    <!-- Navigation Drawer -->
-    <string name="nav_open">Open navigation</string>
-    <string name="nav_close">Close navigation</string>
-
-    <!-- Drawer Menu -->
-    <string name="menu_configure_webhook">Configure Webhook</string>
-
-    <!-- Webhook Dialog -->
-    <string name="edit_webhook_title">Edit Webhook URL</string>
-    <string name="webhook_hint">Enter webhook URL…</string>
+    <!-- Actions / Buttons -->
+    <string name="upload">Upload</string>
+    <string name="delete">Delete</string>
+    <string name="edit">EDIT</string>
     <string name="save">Save</string>
-    <string name="saved">Saved</string>
-    <string name="invalid_url">Invalid URL</string>
-
-    <!-- Logs -->
-    <string name="clear_logs">Clear logs</string>
-    <string name="logs_cleared">Logs cleared</string>
-    <string name="no_logs_yet">No logs yet</string>
-
-    <!-- General -->
-    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="clear_logs">Clear logs</string>
 
-    <!-- Placeholders מהתבנית -->
+    <!-- Fields / Labels -->
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="type">Type</string>
+    <string name="notes">Notes</string>
+
+    <!-- Webhook config -->
+    <string name="configure_webhooks">Configure webhooks</string>
+    <string name="incoming_webhook">Incoming webhook URL</string>
+    <string name="output_webhook">Output webhook URL</string>
+    <string name="delete_webhook">Output delete webhook URL</string>
+
+    <!-- Defaults -->
+    <string name="default_incoming_webhook">https://hook.eu2.make.com/3whnaefpngyp1nwsa3ht1vt9pob17reg</string>
+    <string name="default_delete_webhook">https://hook.eu2.make.com/wnt248rsa0x6fhrtoh64dk4brg6s1rft</string>
+
+    <!-- Toasts -->
+    <string name="webhooks_saved">Webhooks saved</string>
+    <string name="upload_webhook_missing">Output webhook is not set</string>
+    <string name="upload_ok">Uploaded</string>
+    <string name="upload_fail">Upload failed</string>
+    <string name="delete_ok">Lead deleted</string>
+    <string name="delete_fail">Delete failed</string>
+
+    <!-- Legacy / compatibility (כדי לא לשבור קבצים ישנים) -->
+    <string name="webhook_hint">Enter webhook URL</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet</string>
     <string name="action_settings">Settings</string>
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="first_fragment_label">First</string>
+    <string name="second_fragment_label">Second</string>
 </resources>
