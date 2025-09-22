@@ -20,15 +20,27 @@
             android:background="@color/bg_black"
             app:contentInsetStartWithNavigation="0dp">
 
-            <!-- לוגו בלבד -->
+            <!-- לוגו – מוצמד יותר לימין באמצעות מרווח קטן בלבד -->
             <ImageView
                 android:id="@+id/ivLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/bam_logo"
                 android:contentDescription="@string/app_name"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"/>
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+
+            <!-- המבורגר בצד ימין -->
+            <ImageButton
+                android:id="@+id/btnHamburger"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="6dp"
+                android:contentDescription="@string/configure_webhooks"
+                android:src="@drawable/ic_menu"
+                android:tint="@android:color/white"/>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -55,6 +67,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:clipToPadding="false"
-            android:paddingBottom="16dp"/>
+            android:paddingBottom="24dp"/>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

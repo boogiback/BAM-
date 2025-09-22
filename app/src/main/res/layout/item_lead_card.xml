@@ -1,173 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/card_bg"
-    android:orientation="vertical"
-    android:padding="12dp"
-    android:layout_marginBottom="10dp"
-    android:elevation="2dp">
+    android:layout_marginBottom="16dp"
+    app:cardBackgroundColor="@color/card_white"
+    app:cardCornerRadius="14dp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="6dp">
 
-    <!-- VIEW MODE -->
+    <!-- View mode -->
     <LinearLayout
         android:id="@+id/contentViewMode"
+        android:orientation="vertical"
+        android:padding="18dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:minHeight="180dp">
 
         <TextView
             android:id="@+id/tvTs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="13sp"
-            android:textColor="@color/text_primary"/>
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"/>
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="18sp"
             android:textColor="@color/text_primary"
-            android:layout_marginTop="6dp"/>
+            android:textSize="20sp"
+            android:paddingTop="6dp"/>
 
+        <!-- נוסיף תקציר/סיכום (summary) כדי להתאים ל-LeadAdapter -->
         <TextView
             android:id="@+id/tvSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:paddingTop="6dp"
+            android:lineSpacingExtra="2dp"/>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="WhatsApp:"
+            android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginTop="4dp"/>
+            android:paddingTop="10dp"/>
 
         <TextView
             android:id="@+id/tvPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/link_color"
+            android:autoLink="none"
+            android:textColorLink="#1A73E8"
+            android:textColor="@color/text_primary"
+            android:paddingTop="2dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email:"
             android:textStyle="bold"
-            android:layout_marginTop="8dp"
-            android:text="-" />
+            android:textColor="@color/text_primary"
+            android:paddingTop="8dp"/>
 
         <TextView
             android:id="@+id/tvEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/link_color"
-            android:layout_marginTop="2dp"
-            android:text="-" />
+            android:autoLink="none"
+            android:textColorLink="#1A73E8"
+            android:textColor="@color/text_primary"
+            android:paddingTop="2dp"/>
 
         <TextView
             android:id="@+id/tvType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:paddingTop="8dp"/>
+
+        <TextView
+            android:id="@+id/tvNotesLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notes"
+            android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginTop="4dp"/>
+            android:paddingTop="10dp"/>
 
         <TextView
             android:id="@+id/tvNotes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/text_primary"
-            android:layout_marginTop="6dp"/>
+            android:lineSpacingExtra="2dp"
+            android:minLines="2"
+            android:paddingTop="2dp"/>
 
         <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="end"
-            android:orientation="horizontal">
+            android:paddingTop="14dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnUpload"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/upload"/>
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_weight="1"
+                android:text="@string/upload"
+                android:textColor="@android:color/white"
+                app:backgroundTint="@color/btn_purple"/>
 
-            <Button
+            <Space android:layout_width="12dp" android:layout_height="1dp"/>
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDelete"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/delete"/>
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_weight="1"
+                android:text="@string/delete"
+                android:textColor="@android:color/white"
+                app:backgroundTint="@color/btn_purple"/>
 
-            <Button
+            <Space android:layout_width="12dp" android:layout_height="1dp"/>
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEdit"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/edit"/>
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_weight="1"
+                android:text="@string/edit"
+                android:textColor="@android:color/white"
+                app:backgroundTint="@color/btn_purple"/>
         </LinearLayout>
     </LinearLayout>
 
-    <!-- EDIT MODE -->
+    <!-- Edit mode -->
     <LinearLayout
         android:id="@+id/contentEditMode"
         android:visibility="gone"
+        android:orientation="vertical"
+        android:padding="18dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:minHeight="180dp">
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/etFirstName"
+            android:hint="@string/first_name"
+            android:textColor="@color/text_primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/etLastName"
+            android:hint="@string/last_name"
+            android:textColor="@color/text_primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <EditText
-                android:id="@+id/etFirstName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/first_name"/>
-            <EditText
-                android:id="@+id/etLastName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:hint="@string/last_name"/>
-        </LinearLayout>
+            android:layout_marginTop="8dp"/>
 
         <EditText
             android:id="@+id/etType"
+            android:hint="@string/type"
+            android:textColor="@color/text_primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:hint="@string/type"/>
+            android:layout_marginTop="8dp"/>
 
         <EditText
             android:id="@+id/etNotes"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:gravity="top|start"
-            android:layout_marginTop="6dp"
             android:hint="@string/notes"
-            android:inputType="textMultiLine"/>
+            android:textColor="@color/text_primary"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:gravity="top|start"
+            android:layout_marginTop="8dp"/>
 
         <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="end"
-            android:orientation="horizontal">
+            android:paddingTop="14dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/save"/>
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_weight="1"
+                android:text="@string/save"
+                android:textColor="@android:color/white"
+                app:backgroundTint="@color/btn_purple"/>
 
-            <Button
+            <Space android:layout_width="12dp" android:layout_height="1dp"/>
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCancel"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/cancel"/>
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_weight="1"
+                android:text="@string/cancel"
+                android:textColor="@android:color/white"
+                app:backgroundTint="@color/btn_purple"/>
         </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -42,21 +42,38 @@ public class LeadStore {
         return out;
     }
 
-    // תאימות אחורה: טוען גם מפתחות ישנים result_*
+    /**
+     * טעינה תואמת-עבר + מיגרציה חד-פעמית:
+     * - קורא גם מהפורמט החדש (results_json)
+     * - קורא כל מפתח ישן result_* וממיר ל-Leads
+     * - אם נמצאו ישנים: שומר הכול בפורמט החדש ומוחק את כל result_* כדי שלא יחזרו שוב
+     */
     public static ArrayList<Lead> loadLeadsCompat(Context ctx) {
         ArrayList<Lead> out = new ArrayList<Lead>(loadLeads(ctx));
-        Map<String, ?> all = prefsR(ctx).getAll();
+
+        SharedPreferences p = prefsR(ctx);
+        Map<String, ?> all = p.getAll();
+        ArrayList<String> legacyKeys = new ArrayList<String>();
+
         for (Map.Entry<String, ?> e : all.entrySet()) {
             String k = e.getKey();
             Object v = e.getValue();
             if (k != null && k.startsWith("result_") && v instanceof String) {
+                legacyKeys.add(k);
                 try {
                     JSONObject j = new JSONObject((String) v);
                     Lead L = new Lead();
-                    L.id      = k;
+                    L.id      = k; // נשמור את ה-id כדי שמחיקות עתידיות יתאימו
                     L.jobId   = j.optString("jobId", "");
                     L.summary = j.optString("summary", "");
-                    L.ts      = System.currentTimeMillis();
+
+                    // ננסה להביא ts מקורי אם יש; אחרת fallback
+                    long ts = j.optLong("ts", 0);
+                    if (ts == 0) {
+                        JSONObject rTs = j.optJSONObject("result");
+                        if (rTs != null) ts = rTs.optLong("ts", 0);
+                    }
+                    L.ts = ts > 0 ? ts : System.currentTimeMillis();
 
                     JSONObject r = j.optJSONObject("result");
                     if (r == null) r = new JSONObject();
@@ -68,16 +85,33 @@ public class LeadStore {
                     L.notes     = r.optString("notes",      "");
 
                     out.add(L);
-                } catch (Exception ignored) {}
+                } catch (Exception ignore) {}
             }
         }
-        out.sort(new Comparator<Lead>() {
-            @Override
-            public int compare(Lead a, Lead b) {
-                // סדר יורד לפי ts
-                return Long.compare(b.ts, a.ts);
-            }
-        });
+
+        // אם נמצאו רשומות legacy: נבצע מיגרציה ונמחק אותן כדי שלא יחזרו שוב
+        if (!legacyKeys.isEmpty()) {
+            // סדר יורד לפי ts
+            out.sort(new Comparator<Lead>() {
+                @Override
+                public int compare(Lead a, Lead b) { return Long.compare(b.ts, a.ts); }
+            });
+
+            // נשמור בפורמט החדש
+            saveLeads(ctx, out);
+
+            // וננקה את ה-legacy keys
+            SharedPreferences.Editor ed = p.edit();
+            for (String k : legacyKeys) ed.remove(k);
+            ed.apply();
+        } else {
+            // ממילא מיון יורד – לשמירה על סדר עקבי
+            out.sort(new Comparator<Lead>() {
+                @Override
+                public int compare(Lead a, Lead b) { return Long.compare(b.ts, a.ts); }
+            });
+        }
+
         return out;
     }
 
@@ -103,7 +137,6 @@ public class LeadStore {
         String s = prefsS(ctx).getString(KEY_INCOMING_WEBHOOK, DEFAULT_INCOMING_WEBHOOK);
         return TextUtils.isEmpty(s) ? DEFAULT_INCOMING_WEBHOOK : s;
     }
-    /** Output = ה-upload */
     public static String getUploadWebhook(Context ctx) {
         return prefsS(ctx).getString(KEY_OUTPUT_WEBHOOK, "");
     }

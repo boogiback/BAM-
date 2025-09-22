@@ -1,89 +1,75 @@
 package com.example.screenton8n;
 
-import android.content.ClipData;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.webkit.MimeTypeMap;
-import android.widget.Toast;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * Bridge שמקבל ACTION_SEND מה-Share Sheet ומעביר את התוכן ל-UploadService.
+ * בגרסה זו אנו תומכים בשיתוף תמונה (image/*) שנשלחת ל-webhook.
+ */
 public class ShareBridgeActivity extends AppCompatActivity {
+
+    private static final String TAG = "ShareBridge";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try {
-            Intent in = getIntent();
-            if (in == null) {
-                Toast.makeText(this, "No share intent", Toast.LENGTH_SHORT).show();
-                finish();
-                return;
-            }
+        Intent in = getIntent();
+        String action = in != null ? in.getAction() : null;
+        String type   = in != null ? in.getType()   : null;
 
-            String action = in.getAction();
-            String type   = in.getType();
+        Log.d(TAG, "onCreate action=" + action + " type=" + type);
 
-            if (!Intent.ACTION_SEND.equals(action) || type == null || !type.startsWith("image/")) {
-                Toast.makeText(this, "Unsupported share type", Toast.LENGTH_SHORT).show();
-                finish();
-                return;
-            }
+        boolean started = false;
 
-            Uri uri = in.getParcelableExtra(Intent.EXTRA_STREAM);
-            if (uri == null) {
-                ClipData cd = in.getClipData();
-                if (cd != null && cd.getItemCount() > 0) {
-                    uri = cd.getItemAt(0).getUri();
-                }
-            }
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            // תמונות
+            if (type.startsWith("image/")) {
+                Uri imageUri = in.getParcelableExtra(Intent.EXTRA_STREAM);
+                Log.d(TAG, "EXTRA_STREAM uri=" + imageUri);
+                if (imageUri != null) {
+                    // בונים Intent ל-UploadService עם אותו type ו-EXTRA_STREAM
+                    Intent svc = new Intent(this, UploadService.class);
+                    svc.setAction(Intent.ACTION_SEND);
+                    svc.setType(type);
+                    svc.putExtra(Intent.EXTRA_STREAM, imageUri);
 
-            if (uri == null) {
-                Toast.makeText(this, "No image URI in share", Toast.LENGTH_SHORT).show();
-                finish();
-                return;
-            }
+                    // חשוב: לאפשר לשירות גישה לקריאת ה-URI
+                    svc.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    try {
+                        grantUriPermission(getPackageName(), imageUri,
+                                Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    } catch (Exception ignored) {}
 
-            String mime = type;
-            try {
-                ContentResolver cr = getContentResolver();
-                String detected = cr.getType(uri);
-                if (detected != null && !detected.equals("image/*")) {
-                    mime = detected;
-                } else {
-                    String ext = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
-                    if (ext != null) {
-                        String byExt = MimeTypeMap.getSingleton()
-                                .getMimeTypeFromExtension(ext.toLowerCase());
-                        if (byExt != null) mime = byExt;
+                    try {
+                        startForegroundService(svc);
+                    } catch (IllegalStateException e) {
+                        Log.w(TAG, "startForegroundService failed, fallback to startService", e);
+                        startService(svc);
                     }
+                    started = true;
+                } else {
+                    Log.e(TAG, "No image URI received in EXTRA_STREAM");
                 }
-                if (mime == null || mime.equals("image/*")) mime = "image/jpeg";
-            } catch (Throwable ignore) {}
-
-            Intent svc = new Intent(this, UploadService.class);
-            svc.putExtra("uri", uri.toString());
-            svc.putExtra("mime", mime);
-            svc.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-            grantUriPermission(getPackageName(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-            if (Build.VERSION.SDK_INT >= 26) {
-                startForegroundService(svc);
             } else {
-                startService(svc);
+                Log.w(TAG, "Unsupported type for this build: " + type + " (expecting image/*)");
             }
-
-            Toast.makeText(this, "Uploading…", Toast.LENGTH_SHORT).show();
-        } catch (Throwable t) {
-            Toast.makeText(this, "Share error: " + t.getMessage(), Toast.LENGTH_LONG).show();
-        } finally {
-            finish();
+        } else {
+            Log.w(TAG, "Not an ACTION_SEND intent");
         }
+
+        if (!started) {
+            // אפשר להעיף toast קטן אם תרצה:
+            // Utils.toast(this, "Nothing to share");
+            Log.w(TAG, "Service not started (no valid payload)");
+        }
+
+        finish(); // לא משאירים את המסך הזה פתוח
     }
 }

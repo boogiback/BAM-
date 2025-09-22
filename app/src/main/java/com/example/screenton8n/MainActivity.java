@@ -1,6 +1,7 @@
 package com.example.screenton8n;
 
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,8 +25,10 @@ public class MainActivity extends AppCompatActivity
         Toolbar tb = findViewById(R.id.toolbar);
         setSupportActionBar(tb);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayShowTitleEnabled(false);
-        tb.setNavigationIcon(R.drawable.ic_menu);
-        tb.setNavigationOnClickListener(v -> showConfigureWebhooksDialog());
+
+        // המבורגר בצד ימין (כפתור נפרד בתוך ה-Toolbar)
+        ImageButton btnHamburger = findViewById(R.id.btnHamburger);
+        btnHamburger.setOnClickListener(v -> showConfigureWebhooksDialog());
 
         rv = findViewById(R.id.recycler);
         rv.setLayoutManager(new LinearLayoutManager(this));

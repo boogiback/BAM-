@@ -26,15 +26,31 @@
             </intent-filter>
         </activity>
 
-        <!-- Receive share (one image) -->
+        <!-- Receive share (image, text, JSON) -->
         <activity
             android:name=".ShareBridgeActivity"
             android:exported="true"
             android:grantUriPermissions="true">
+
+            <!-- תמונה -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="image/*" />
+            </intent-filter>
+
+            <!-- טקסט -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <!-- JSON -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/json" />
             </intent-filter>
         </activity>
 

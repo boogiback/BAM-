@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,9 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
+
 import org.json.JSONObject;
 
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
@@ -52,7 +52,7 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.VH> {
         LinearLayout contentViewMode, contentEditMode;
         TextView tvTitle, tvTime, tvSummary, tvPhone, tvEmail, tvType, tvNotes;
         EditText etFirst, etLast, etType, etNotes;
-        Button btnUpload, btnDelete, btnEdit, btnSave, btnCancel;
+        MaterialButton btnUpload, btnDelete, btnEdit, btnSave, btnCancel;
 
         VH(@NonNull View v) {
             super(v);
@@ -102,24 +102,28 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.VH> {
         h.tvType.setText(TextUtils.isEmpty(L.type) ? "-" : L.type);
         h.tvNotes.setText(TextUtils.isEmpty(L.notes) ? "-" : L.notes);
 
-        // Edit mode fields
+        // Edit mode fields (טקסט כהה)
         h.etFirst.setText(L.firstName);
+        h.etFirst.setTextColor(ContextCompat.getColor(ctx, R.color.text_primary));
         h.etLast.setText(L.lastName);
+        h.etLast.setTextColor(ContextCompat.getColor(ctx, R.color.text_primary));
         h.etType.setText(L.type);
+        h.etType.setTextColor(ContextCompat.getColor(ctx, R.color.text_primary));
         h.etNotes.setText(L.notes);
+        h.etNotes.setTextColor(ContextCompat.getColor(ctx, R.color.text_primary));
 
-        // background by upload state
+        // רקע לפי סטטוס Upload
         h.card.setBackgroundColor(L.uploaded
                 ? ContextCompat.getColor(ctx, R.color.lead_uploaded_bg)
-                : ContextCompat.getColor(ctx, R.color.card_bg));
+                : ContextCompat.getColor(ctx, R.color.card_white));
 
         setMode(h, false);
 
-        // links
+        // קישורים
         h.tvPhone.setOnClickListener(v -> openWhatsApp(L.phone));
         h.tvEmail.setOnClickListener(v -> openEmail(L.email));
 
-        // buttons
+        // כפתורים
         h.btnEdit.setOnClickListener(v -> setMode(h, true));
         h.btnCancel.setOnClickListener(v -> {
             h.etFirst.setText(L.firstName);
@@ -137,8 +141,18 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.VH> {
             if (callbacks != null) callbacks.onDatasetChanged();
             setMode(h, false);
         });
+
         h.btnUpload.setOnClickListener(v -> doPostWebhook(L, h));
-        h.btnDelete.setOnClickListener(v -> doDeleteWebhookAndRemove(L, h));
+
+        // מחיקה מיידית (לא נכשלת)
+        h.btnDelete.setOnClickListener(v -> {
+            int adapterPos = h.getAdapterPosition();
+            if (adapterPos >= 0 && adapterPos < data.size()) {
+                data.remove(adapterPos);
+                notifyItemRemoved(adapterPos);
+                if (callbacks != null) callbacks.onDatasetChanged();
+            }
+        });
     }
 
     private void setMode(VH h, boolean edit) {
@@ -163,8 +177,10 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.VH> {
             Utils.toast(ctx, ctx.getString(R.string.upload_webhook_missing));
             return;
         }
+        // בונים JSON מעודכן לפי הערכים הנוכחיים של ה-Lead
+        JSONObject payload = L.toJson();
         Executors.newSingleThreadExecutor().execute(() -> {
-            final boolean ok = httpPostJson(url, L.toJson()); // effectively final
+            final boolean ok = httpPostJson(url, payload); // effectively final
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (ok) {
                     L.uploaded = true;
@@ -174,26 +190,6 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.VH> {
                 } else {
                     Utils.toast(ctx, ctx.getString(R.string.upload_fail));
                 }
-            });
-        });
-    }
-
-    private void doDeleteWebhookAndRemove(Lead L, VH h) {
-        String url = callbacks == null ? "" : callbacks.getDeleteWebhook();
-
-        Executors.newSingleThreadExecutor().execute(() -> {
-            // חישוב תוצאה סופית כ-final
-            final boolean okResult = TextUtils.isEmpty(url) || httpPostJson(url, L.toJson());
-            final int pos = h.getAdapterPosition();
-
-            new Handler(Looper.getMainLooper()).post(() -> {
-                if (pos >= 0 && pos < data.size()) {
-                    data.remove(pos);
-                    notifyItemRemoved(pos);
-                    if (callbacks != null) callbacks.onDatasetChanged();
-                }
-                Utils.toast(ctx, okResult ? ctx.getString(R.string.delete_ok)
-                        : ctx.getString(R.string.delete_fail));
             });
         });
     }
@@ -219,8 +215,5 @@ public class LeadAdapter extends RecyclerView.Adapter<LeadAdapter.VH> {
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return data.size();
-    }
+    @Override public int getItemCount() { return data.size(); }
 }
